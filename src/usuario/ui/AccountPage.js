@@ -24,6 +24,15 @@ export default function AccountPage() {
           Mantenimiento de Usuarios
         </button>
 
+        <button onClick={() => navigate("/productos")} style={{ marginTop: "20px" }}>
+          Mantenimiento de Productos
+        </button>
+
+        <button onClick={() => navigate("/pedidos")} style={{ marginTop: "20px" }}>
+          Mis pedidos
+        </button>
+
+
         <button onClick={() => logout()} style={{ marginTop: "20px" }}>
           Cerrar Sesión
         </button>

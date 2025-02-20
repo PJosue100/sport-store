@@ -7,7 +7,7 @@ export class ApiService {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          "Authorization": token
         },
         body: JSON.stringify(pedido)
       });
@@ -34,7 +34,7 @@ export class ApiService {
     try {
       const response = await fetch(`${API_URL}pedidos/pedido/${id}`, {
         method: "GET",
-        headers: { "Authorization": `Bearer ${token}` }
+        headers: { "Authorization": token }
       });
       return response.json();
     } catch (error) {
@@ -47,7 +47,7 @@ export class ApiService {
     try {
       const response = await fetch(`${API_URL}pedidos/usuario/${idUsuario}`, {
         method: "GET",
-        headers: { "Authorization": `Bearer ${token}` }
+        headers: { "Authorization": token }
       });
       return response.json();
     } catch (error) {
@@ -62,7 +62,7 @@ export class ApiService {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          "Authorization": token
         },
         body: JSON.stringify(pedido)
       });
@@ -79,7 +79,7 @@ export class ApiService {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          "Authorization": token
         },
         body: JSON.stringify({ estado })
       });
@@ -96,7 +96,7 @@ export class ApiService {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          "Authorization": token
         },
         body: JSON.stringify(detalle)
       });
@@ -111,7 +111,7 @@ export class ApiService {
     try {
       const response = await fetch(`${API_URL}detalle_pedidos/publico`, {
         method: "GET",
-        headers: { "Authorization": `Bearer ${token}` }
+        headers: { "Authorization": token }
       });
       return response.json();
     } catch (error) {
@@ -124,7 +124,7 @@ export class ApiService {
     try {
       const response = await fetch(`${API_URL}detalle_pedidos/detallePedido/${id}`, {
         method: "GET",
-        headers: { "Authorization": `Bearer ${token}` }
+        headers: { "Authorization": token }
       });
       return response.json();
     } catch (error) {
@@ -137,7 +137,7 @@ export class ApiService {
     try {
       const response = await fetch(`${API_URL}detalle_pedidos/pedido/${idPedido}`, {
         method: "GET",
-        headers: { "Authorization": `Bearer ${token}` }
+        headers: { "Authorization": token }
       });
       return response.json();
     } catch (error) {
@@ -152,7 +152,7 @@ export class ApiService {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          "Authorization": token
         },
         body: JSON.stringify(detalle)
       });
@@ -167,7 +167,7 @@ export class ApiService {
     try {
       const response = await fetch(`${API_URL}detalle_pedidos/${id}`, {
         method: "DELETE",
-        headers: { "Authorization": `Bearer ${token}` }
+        headers: { "Authorization": token }
       });
       return response.json();
     } catch (error) {

@@ -29,7 +29,7 @@ function Header() {
         </Link>
 
         {/* Icono del carrito */}
-        <Link to="/perfil">
+        <Link to="/carrito">
           <button className="p-2">
             <FaShoppingCart size={24} />
           </button>
