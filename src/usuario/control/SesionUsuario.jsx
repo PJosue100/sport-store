@@ -14,6 +14,11 @@ export function UserProvider({ children }) {
     return localStorage.getItem("userToken") || null;
   });
 
+  const [filtroHeader, setFiltroHeader] = useState(() => {
+    return localStorage.getItem("filtroHeader") || null;
+  });
+
+
   const usuarioActual = (userData) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
@@ -24,8 +29,13 @@ export function UserProvider({ children }) {
     localStorage.setItem("userToken", tokenData);
   };
 
+  const filtroHeaderActual = (userData) => {
+    setFiltroHeader(userData);
+    localStorage.setItem("filtroHeader", JSON.stringify(userData));
+  };
+
+
   const logout = () => {
-    //navigate("/usuarios") ---Hacer despues
     setUser(null);
     setToken(null);
     localStorage.removeItem("user");
@@ -33,7 +43,7 @@ export function UserProvider({ children }) {
   };
 
   return (
-    <UserContext.Provider value={{ user, token, usuarioActual, login, logout }}>
+    <UserContext.Provider value={{ user, token, filtroHeader, usuarioActual, filtroHeaderActual, login, logout }}>
       {children}
     </UserContext.Provider>
   );

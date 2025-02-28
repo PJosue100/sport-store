@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext } from "react";
 
-const API_URL = "http://10.1.0.86:8082/api/usuarios/";
+const API_URL = "http://localhost:8084/api/usuarios/";
 const UserContext = createContext();
 
 export class ApiService {

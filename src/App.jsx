@@ -4,6 +4,7 @@ import { UserProvider } from "./usuario/control/SesionUsuario";
 import { CartProvider  } from "./pedidos/control/SesionPedido";
 import AppRoutes from "./utileria/Routes";
 import Header from "./principal/ui/Header";
+import './App.css'
 
 function App() {
   return (
@@ -20,4 +21,4 @@ function App() {
   );
 }
 
-export default App;
+export default App
