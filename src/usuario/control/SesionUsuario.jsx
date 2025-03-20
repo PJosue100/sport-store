@@ -29,9 +29,9 @@ export function UserProvider({ children }) {
     localStorage.setItem("userToken", tokenData);
   };
 
-  const filtroHeaderActual = (userData) => {
-    setFiltroHeader(userData);
-    localStorage.setItem("filtroHeader", JSON.stringify(userData));
+  const filtroHeaderActual = (filtro) => {
+    setFiltroHeader(filtro);
+    localStorage.setItem("filtroHeader", filtro);
   };
 
 

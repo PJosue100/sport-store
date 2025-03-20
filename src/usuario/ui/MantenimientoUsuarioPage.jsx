@@ -119,6 +119,8 @@ export default function MantenimientoUsuarioPage() {
             <option value="cliente">Cliente</option>
             <option value="admin">Administrador</option>
           </select>
+          <input type="password" name="passwordHash" value={formData.passwordHash} onChange={handleChange} required className="input" placeholder="Password" />
+
           <div className="flex gap-4">
             <button type="submit" className="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg">
               {editingUser ? "Actualizar Usuario" : "Crear Usuario"}

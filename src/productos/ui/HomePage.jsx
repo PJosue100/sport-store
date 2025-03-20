@@ -7,24 +7,40 @@ import { useUser } from "../../usuario/control/SesionUsuario";
 import { useCart } from "../../pedidos/control/SesionPedido";
 
 function HomePage() {
-  const { filtroHeader } = useUser();
+  const { filtroHeader = "" } = useUser();
   const { productos, error } = useFetchProductos();
   const [listaProductos, setListaProductos] = useState([]);
+  const [productosFiltrados, setProductosFiltrados] = useState([]);
   const { addProduct } = useCart();
 
   useEffect(() => {
     if (productos.length > 0) {
       ProductoController.setProductos(productos);
       setListaProductos(ProductoController.getProductos());
+      console.log("La lista de productos se actualizo");
+      setProductosFiltrados(productos)
     }
   }, [productos]);
 
-  // Filtrar productos según filtroHeader
-  const productosFiltrados = listaProductos.filter((p) =>
-    filtroHeader
-      ? p.descripcion.toLowerCase().includes(filtroHeader.toLowerCase())
-      : true
-  );
+  // Filtrar productos cuando listaProductos o filtroHeader cambien
+  useEffect(() => {
+    console.log("Filtro header:", filtroHeader);
+
+    const filtroLimpio = filtroHeader?.trim() || ""; // Asegurar que sea un string
+
+    if (filtroLimpio.length > 0) {
+      console.log("Filtrando productos...");
+      setProductosFiltrados(
+        listaProductos.filter((p) =>
+          p.descripcion?.toLowerCase().includes(filtroLimpio.toLowerCase())
+        )
+      );
+    } else {
+      console.log("Mostrando todos los productos (filtro vacío)");
+      setProductosFiltrados(listaProductos);
+    }
+  }, [listaProductos, filtroHeader]);
+
 
   if (error) {
     return <p className="text-red-500 text-center mt-4">Error: {error}</p>;
