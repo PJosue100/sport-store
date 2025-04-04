@@ -12,7 +12,7 @@ function App() {
       <CartProvider>
       <Router>
         <Header />
-        <main className="container mx-auto p-4">
+        <main className="container mx-auto p-2">
           <AppRoutes />
         </main>
       </Router>

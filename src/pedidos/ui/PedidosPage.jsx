@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { format, parseISO } from 'date-fns';
+import { es } from 'date-fns/locale';
+
 import { useUser } from "../../usuario/control/SesionUsuario";
 import { ApiService } from "../repositorio/RepositorioPedidos";
 import useFetchProductos from "../../productos/repositorio/useFetchProductos";
@@ -60,8 +63,8 @@ function PedidosPage() {
         <div className="overflow-x-auto">
           {pedidos.map((pedido) => (
             <div key={pedido.id} className="bg-gray-800 p-6 mb-6 rounded-lg shadow-md">
-              <h2 className="text-2xl text-green-400">Pedido ID: {pedido.id}</h2>
-              <p className="text-gray-300">Fecha: {pedido.fechaPedido}</p>
+              <h2 className="text-2xl text-green-400">Pedido No.: {pedido.id}</h2>
+              <p className="text-gray-300">Fecha: {format(parseISO(pedido.fechaPedido), "d MMM yyyy, HH:mm", { locale: es })}</p>
               <table className="w-full mt-4 border-collapse">
                 <thead>
                   <tr className="bg-gray-700 text-left text-white">
