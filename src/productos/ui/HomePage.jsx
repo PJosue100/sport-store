@@ -28,16 +28,18 @@ function HomePage() {
 
     const filtroLimpio = filtroHeader?.trim() || ""; // Asegurar que sea un string
 
+    let productosVisibles = listaProductos.filter(p => p.unidadesDisponibles > 0);
+
     if (filtroLimpio.length > 0) {
       console.log("Filtrando productos...");
       setProductosFiltrados(
-        listaProductos.filter((p) =>
+        productosVisibles.filter((p) =>
           p.descripcion?.toLowerCase().includes(filtroLimpio.toLowerCase())
         )
       );
     } else {
       console.log("Mostrando todos los productos (filtro vacío)");
-      setProductosFiltrados(listaProductos);
+      setProductosFiltrados(productosVisibles);
     }
   }, [listaProductos, filtroHeader]);
 
@@ -73,6 +75,9 @@ function HomePage() {
               <p className="text-lg font-bold text-green-400 mt-2">
                 Q {p.precio.toFixed(2)}
               </p>
+              <p className="text-lg font-bold text-green-400 mt-2">
+                {p.unidadesDisponibles}
+              </p>
               <button
                 className="mt-3 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded flex items-center justify-center"
                 onClick={() =>
@@ -82,6 +87,8 @@ function HomePage() {
                     precio: p.precio,
                     cantidad: 1,
                     imagenUrl: p.imagenUrl,
+                    descripcionExtensa: p.descripcionExtensa,
+                    unidadesDisponibles: p.unidadesDisponibles,
                   })
                 }
               >

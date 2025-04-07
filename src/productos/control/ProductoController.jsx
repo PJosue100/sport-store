@@ -7,7 +7,7 @@ class ProductoController {
 
   setProductos(jsonData) {
     this.productos = jsonData.map(
-      (item) => new Producto(item.id, item.imagenUrl, item.descripcion, item.precio, item.creadoEn)
+      (item) => new Producto(item.id, item.imagenUrl, item.descripcion, item.precio, item.creadoEn, item.descripcionExtensa, item.unidadesDisponibles)
     );
   }
 

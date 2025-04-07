@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8086/api/";
+const API_URL = "http://192.168.0.74:8086/api/";
 
 export class ApiService {
   static async crearPedido(pedido, token) {

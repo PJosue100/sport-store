@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
-const API_URL = "http://localhost:8085/api/productos";
-//const API_URL = "http://localhost:8080/api/productos/publico";
+const API_URL = "http://192.168.0.74:8085/api/productos";
+//const API_URL = "http://192.168.0.74:8080/api/productos/publico";
 
 function useFetchProductos(token) {
   const [productos, setProductos] = useState([]);
@@ -52,7 +52,26 @@ function useFetchProductos(token) {
     setProductos((prev) => prev.map((p) => (p.id === id ? { ...p, ...producto } : p)));
   };
 
-  return { productos, error, crearProducto, actualizarProducto };
+  const actualizarStockProducto = async (id, cantidadVendida) => {
+    const response = await fetch(`${API_URL}/update-stock/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "text/plain",
+        Authorization: token,
+      },
+      body: cantidadVendida,
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al actualizar stock el producto");
+    }
+
+    const productoActualizado = await response.json();
+
+    setProductos((prev) => prev.map((p) => (p.id === id ? { ...p, ...productoActualizado } : p)));
+  };
+
+  return { productos, error, crearProducto, actualizarProducto, actualizarStockProducto };
 }
 
 export default useFetchProductos;

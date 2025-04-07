@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext } from "react";
 
-const API_URL = "http://localhost:8084/api/usuarios/";
+const API_URL = "http://192.168.0.74:8084/api/usuarios/";
 const UserContext = createContext();
 
 export class ApiService {
@@ -21,6 +21,46 @@ export class ApiService {
     }
   }
 
+  static async recoveryPassUser(email) {
+    try {
+      const response = await fetch(`${API_URL}recovery-pass`, {
+        method: "PUT",
+        headers: { "Content-Type": "text/plain" },
+        body: email
+      });
+      if (response.status === 200) {
+        return { success: true, mensaje: await response.text() };
+      }
+      return { success: false };
+    } catch (error) {
+      console.error("Error en la autenticación:", error);
+      return { success: false };
+    }
+  }
+
+  static async cambiarContraseniaUsuario(id, formulario, token) {
+    try {
+      const response = await fetch(`${API_URL}change-pass/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", "Authorization": token },
+        body: JSON.stringify({contraseniaActual: formulario.contraseniaActual, contraseniaNueva: formulario.contraseniaNueva })
+      });
+      if (response.status === 200) {
+        return { success: true, mensaje: await response.text() };
+      }
+      return { success: false };
+    } catch (error) {
+      console.error("Error en la autenticación:", error);
+      return { success: false };
+    }
+  }
+
+
+
+
+
+
+
   static async obtenerDatosUsuario(email, token) {
     console.log(email);
     console.log(token);
@@ -39,11 +79,11 @@ export class ApiService {
     }
   }
 
-  static async crearUsuario(usuario, token) {
+  static async crearUsuario(usuario) {
     try {
       const response = await fetch(`${API_URL}new`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": token },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(usuario)
       });
       return response.json();
@@ -96,7 +136,7 @@ export class ApiService {
 
 /*import { useState, useEffect } from "react";
 
-const API_URL = "http://localhost:8080/api/usuarios/";
+const API_URL = "http://192.168.0.74:8080/api/usuarios/";
 //const API_URL = "http://10.1.0.86:8082/api/usuarios/";
 
 export async function loginUser(email, password) {

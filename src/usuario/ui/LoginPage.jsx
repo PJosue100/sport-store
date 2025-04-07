@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { ApiService } from "../repositorio/RepositorioUsuario";
 import { useUser } from "../control/SesionUsuario";
@@ -50,8 +51,11 @@ export default function LoginPage() {
           className="w-full px-4 py-3 mb-4 bg-gray-700 text-white rounded-lg focus:ring-2 focus:ring-green-400 outline-none"
         />
         <button onClick={handleLogin} className="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 active:bg-green-700 focus:ring-4 focus:ring-green-400">Acceder</button>
+        <Link to="/recovery-pass" className="relative">
+          <button className="w-full bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded mt-4">Recuperar Contraseña</button>
+        </Link>  
         <p className="mt-4 text-center text-gray-400">
-          ¿No tienes cuenta? <a href="/" className="text-green-400 hover:text-green-300">Regístrate</a>
+          ¿No tienes cuenta? <a href="/registro" className="text-green-400 hover:text-green-300">Regístrate</a>
         </p>
       </div>
     </div>

@@ -1,12 +1,23 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useCart } from "../control/SesionPedido";
 import { useUser } from "../../usuario/control/SesionUsuario";
 import { ApiService } from "../repositorio/RepositorioPedidos";
 import { FaTrash, FaPlus, FaMinus } from "react-icons/fa";
 
+import useFetchProductos from "../../productos/repositorio/useFetchProductos";
+
 function CarritoPage() {
   const { cart, removeProduct, updateQuantity, clearCart } = useCart();
   const { user, token } = useUser();
+  const { actualizarStockProducto } = useFetchProductos(token);
+
+  const [direccionEnvioFinal, setDireccionEnvioFinal] = useState("");
+
+  useEffect(() => {
+    if (user?.direccionEnvio) {
+      setDireccionEnvioFinal(user.direccionEnvio);
+    }
+  }, [user]);
 
   const total = cart.reduce((sum, item) => sum + item.precio * item.cantidad, 0);
 
@@ -16,11 +27,17 @@ function CarritoPage() {
       return;
     }
 
+    if (!direccionEnvioFinal.trim()) {
+      alert("Debe ingresar una dirección de envío.");
+      return;
+    }
+
     const pedido = {
       idUsuario: user.id,
       fechaPedido: new Date().toISOString(),
       total,
-      estado: "pendiente"
+      estado: "Recibido",
+      direccionEnvio: direccionEnvioFinal.trim()
     };
 
     try {
@@ -38,6 +55,8 @@ function CarritoPage() {
           precioUnitario: item.precio,
           subtotal: item.precio * item.cantidad,
         }, token);
+
+        await actualizarStockProducto(item.idProducto, item.cantidad);
       }
 
       alert(`Pedido creado con éxito. ID: ${response.id}`);
@@ -59,7 +78,6 @@ function CarritoPage() {
             key={item.idProducto}
             className="flex w-full max-w-5xl bg-gray-800 rounded-xl p-4 shadow-lg"
           >
-            {/* Imagen del producto */}
             <div className="w-full sm:w-36 max-w-full h-[50vw] sm:h-auto">
               <img
                 src={item.imagenUrl}
@@ -68,19 +86,14 @@ function CarritoPage() {
               />
             </div>
 
-            {/* Contenido a la derecha de la imagen */}
             <div className="flex flex-col justify-between flex-grow ml-2 relative w-full">
-              {/* Descripción (parte superior izquierda) */}
-              <div>
+              <div >
                 <h3 className="text-base font-bold text-green-400 mb-1">{item.descripcion}</h3>
               </div>
 
-              {/* Contenido inferior derecho (en columna) */}
               <div className="flex flex-col items-end mt-auto space-y-2">
-                {/* Fila 1: Precio unitario */}
                 <p className="text-sm">Precio: Q {item.precio.toFixed(2)}</p>
 
-                {/* Fila 2: Botón eliminar + control de cantidad */}
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => removeProduct(item.idProducto)}
@@ -108,7 +121,6 @@ function CarritoPage() {
                   </button>
                 </div>
 
-                {/* Fila 3: Subtotal */}
                 <p className="text-sm font-bold">
                   Subtotal: Q {(item.precio * item.cantidad).toFixed(2)}
                 </p>
@@ -118,6 +130,22 @@ function CarritoPage() {
         ))}
       </div>
 
+      {/* Dirección de envío editable */}
+      {cart.length > 0 && (
+        <div className="mt-8 max-w-5xl mx-auto bg-gray-800 p-4 rounded-xl shadow-lg text-white">
+          <h2 className="text-lg font-bold mb-2">Dirección de envío</h2>
+          <input
+            type="text"
+            value={direccionEnvioFinal}
+            onChange={(e) => setDireccionEnvioFinal(e.target.value)}
+            placeholder="Ingrese la dirección de envío"
+            className="w-full px-3 py-2 rounded-lg bg-gray-700 text-white placeholder-gray-400"
+            required
+          />
+        </div>
+      )}
+
+
       {/* Total y botón de guardar */}
       <div className="flex flex-col md:flex-row justify-between items-center mt-6 bg-gray-800 p-4 rounded-xl shadow-lg text-white max-w-5xl mx-auto">
         <h2 className="text-2xl font-bold">Total: Q {total.toFixed(2)}</h2>
@@ -125,7 +153,7 @@ function CarritoPage() {
           className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg mt-4 md:mt-0"
           onClick={handleSaveOrder}
         >
-          Guardar Pedido
+          Confirmar Pedido
         </button>
       </div>
     </div>

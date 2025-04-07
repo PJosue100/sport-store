@@ -11,14 +11,30 @@ export function CartProvider({ children }) {
   const addProduct = (product) => {
     setCart((prevCart) => {
       const existingProduct = prevCart.find((p) => p.idProducto === product.idProducto);
+      let updatedCart;
+  
       if (existingProduct) {
-        return prevCart.map((p) =>
-          p.idProducto === product.idProducto ? { ...p, cantidad: p.cantidad + product.cantidad } : p
-        );
+        const nuevaCantidad = existingProduct.cantidad + product.cantidad;
+        if (nuevaCantidad <= existingProduct.unidadesDisponibles) {
+          updatedCart = prevCart.map((p) =>
+            p.idProducto === product.idProducto ? { ...p, cantidad: nuevaCantidad } : p
+          );
+        } else {
+          console.warn(`No se pueden agregar ${product.cantidad} unidades. Solo quedan ${existingProduct.unidadesDisponibles - existingProduct.cantidad} disponibles.`);
+          updatedCart = prevCart;
+        }
+      } else {
+        if (product.cantidad <= product.unidadesDisponibles) {
+          updatedCart = [...prevCart, product];
+        } else {
+          console.warn(`Cantidad inicial (${product.cantidad}) excede las unidades disponibles (${product.unidadesDisponibles}) para el producto ${product.idProducto}`);
+          updatedCart = prevCart;
+        }
       }
-      return [...prevCart, product];
+  
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      return updatedCart;
     });
-    localStorage.setItem("cart", JSON.stringify([...cart, product]));
   };
 
   const removeProduct = (productId) => {
@@ -31,9 +47,17 @@ export function CartProvider({ children }) {
 
   const updateQuantity = (productId, quantity) => {
     setCart((prevCart) => {
-      const updatedCart = prevCart.map((p) =>
-        p.idProducto === productId ? { ...p, cantidad: quantity } : p
-      );
+      const updatedCart = prevCart.map((p) => {
+        if (p.idProducto === productId) {
+          if (quantity <= p.unidadesDisponibles) {
+            return { ...p, cantidad: quantity };
+          } else {
+            console.warn(`Cantidad solicitada (${quantity}) excede las unidades disponibles (${p.unidadesDisponibles}) para el producto ${p.idProducto}`);
+            return p; // No modifica la cantidad si excede las unidades disponibles
+          }
+        }
+        return p;
+      });
       localStorage.setItem("cart", JSON.stringify(updatedCart));
       return updatedCart;
     });
